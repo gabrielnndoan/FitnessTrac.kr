@@ -1,17 +1,46 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+import { useState } from "react";
+import Register from "./components/Register";
+import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+const App = () => {
+  const [username, setUsername] = useState();
+  const [token, setToken] = useState();
+  const [authenticate, setAuthentication] = useState(false);
+  return (
+    <Router>
+      <nav>
+        <Link to="/">HOME</Link>
+        <Link to="/routines">ROUTINES</Link>
+        <Link to="/myRoutines">MY ROUTINES</Link>
+        <Link to="/activities">ACTIVITIES</Link>
+        <Link to="/login">LOGIN</Link>
+        <Link to="/register">REGISTER</Link>
+      </nav>
+      <main>
+        <Switch>
+          <Route path="/routines"></Route>
+          <Route path="/myRoutines"></Route>
+          <Route path="/activities"></Route>
+          <Route path="/login"></Route>
+          <Route path="/register">
+            <Register
+              username={username}
+              setUsername={setUsername}
+              token={token}
+              setToken={setToken}
+              authenticate={authenticate}
+              setAuthentication={setAuthentication}
+            />
+          </Route>
+          <Route path="/"></Route>
+        </Switch>
+      </main>
+    </Router>
+  );
+};
+
+ReactDOM.render(<App />, document.getElementById("root"));
