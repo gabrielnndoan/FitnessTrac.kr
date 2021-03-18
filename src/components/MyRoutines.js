@@ -4,6 +4,9 @@ import MakeRoutine from "./MakeRoutine";
 
 const MyRoutines = ({ username, setUsername }) => {
   const [routines, setRoutines] = useState([]);
+  const [activityId, setActivityId ] = useState("");
+  const [count, setCount] = useState();
+  const [duration, setDuration] = useState();
 
   useEffect(() => {
     getUsername()
@@ -49,6 +52,24 @@ const MyRoutines = ({ username, setUsername }) => {
       .catch(console.error);
   };
 
+ const addAct = (routineId) => {
+  fetch(`https://nameless-cove-00092.herokuapp.com/api/routines/${routineId}/activities`, {
+  method: "POST",
+  body: JSON.stringify({
+    activityId: activityId,
+    count: count, 
+    duration: duration
+  })
+}).then(response => response.json())
+  .then(result => {
+    console.log(result);
+  })
+  .catch(console.error);
+ }
+
+
+
+
   return (
     <div>
       <h1>My Routines</h1>
@@ -65,6 +86,12 @@ const MyRoutines = ({ username, setUsername }) => {
                   onClick={() => deletePost(routine.id)}
                 >
                   Delete Routine
+                </button>
+                <button
+                  className="addActButton"
+                  onClick={() => addAct(routine.id)}
+                >
+                  Add Activity
                 </button>
               </section>
             );
