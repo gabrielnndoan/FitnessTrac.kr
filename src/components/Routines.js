@@ -1,16 +1,9 @@
 import { useEffect, useState } from "react";
-import { getUsername } from "../auth";
 
-const Routines = ({ authenticate, username, setUsername }) => {
+const Routines = () => {
   const [routines, setRoutines] = useState([]);
 
   useEffect(() => {
-    getUsername()
-      .then((response) => response.json())
-      .then((result) => {
-        setUsername(result.username);
-      })
-      .catch(console.error);
     fetch("https://nameless-cove-00092.herokuapp.com/api/routines", {
       headers: {
         "Content-Type": "application/json",
@@ -34,10 +27,19 @@ const Routines = ({ authenticate, username, setUsername }) => {
               <h3>{routine.name}</h3>
               <p>{routine.goal}</p>
               <p>{routine.creatorName}</p>
-              <p>Activities {routine.activities.map((activity, index) => {
-                  return <li key={index}>{activity.name}</li>
-              })}</p>
-              <hr></hr> 
+              <div>
+                Activities
+                {routine.activities.map((activity, index) => {
+                  return (
+                    <>
+                      <h5 key={index}>{activity.name} </h5>
+                      <p>count: {activity.count}</p>
+                      <p>duration: {activity.duration}</p>
+                    </>
+                  );
+                })}
+              </div>
+              <hr></hr>
             </section>
           );
         })}

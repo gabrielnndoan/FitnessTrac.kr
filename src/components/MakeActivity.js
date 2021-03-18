@@ -1,17 +1,17 @@
 import { useState } from "react";
 import Modal from "react-modal";
-import { getToken, getUsername } from "../auth";
+import { getToken } from "../auth";
 Modal.setAppElement("#root");
 
-const MakeRoutine = ({ routines, setRoutines }) => {
+const MakeActivity = ({ activities, setActivities}) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [name, setName] = useState("");
-  const [goal, setGoal] = useState("");
-  const [isPublic, setIsPublic] = useState(false);
-  function makeNewRoutine(event) {
+  const [description, setDescription] = useState("");
+  
+  function makeNewActivity(event) {
     event.preventDefault();
     if (getToken()) {
-      fetch("https://nameless-cove-00092.herokuapp.com/api/routines", {
+      fetch("https://nameless-cove-00092.herokuapp.com/api/activities", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -19,17 +19,19 @@ const MakeRoutine = ({ routines, setRoutines }) => {
         },
         body: JSON.stringify({
           name: name,
-          goal: goal,
-          isPublic: isPublic,
+          description: description,
         }),
       })
         .then((response) => response.json())
         .then((result) => {
           if (result) {
-            const newRoutines = [...routines];
+            const newActivities = [...activities];
             console.log(result);
-            newRoutines.push(result);
-            setRoutines(newRoutines);
+            newActivities.push(result);
+            setActivities(newActivities);
+            if(result.error) {
+                alert("This activity already exists. Please create a new one.")
+            }
           }
         })
         .catch(console.error);
@@ -46,7 +48,7 @@ const MakeRoutine = ({ routines, setRoutines }) => {
           setModalIsOpen(true);
         }}
       >
-        MAKE NEW ROUTINE
+        MAKE NEW ACTIVITY
       </button>
       <Modal
         style={{
@@ -76,8 +78,8 @@ const MakeRoutine = ({ routines, setRoutines }) => {
         }}
         isOpen={modalIsOpen}
       >
-        <form className="postForm" onSubmit={makeNewRoutine}>
-          <h3> Make a New Routine! </h3>
+        <form className="postForm" onSubmit={makeNewActivity}>
+          <h3> Make a New Activity </h3>
           <label className="titleLabel" id="wrapper">
             Name:
           </label>
@@ -87,23 +89,15 @@ const MakeRoutine = ({ routines, setRoutines }) => {
               setName(event.target.value);
             }}
           />
-          <label className="descriptionLabel">Goal:</label>
+          <label className="descriptionLabel">Description:</label>
           <input
             className="descriptionInput"
             onChange={(event) => {
-              setGoal(event.target.value);
-            }}
-          />
-          <label className="descriptionLabel">Is Public:</label>
-          <input
-            className="descriptionInput"
-            type="checkbox"
-            onClick={() => {
-              !isPublic ? setIsPublic(true) : setIsPublic(false);
+              setDescription(event.target.value);
             }}
           />
           <button className="makePostButton" type="submit">
-            Make a New Routine
+            Make a New Activity
           </button>
           <button
             className="closeModalButton"
@@ -117,4 +111,4 @@ const MakeRoutine = ({ routines, setRoutines }) => {
   );
 };
 
-export default MakeRoutine;
+export default MakeActivity;

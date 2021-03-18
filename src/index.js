@@ -51,7 +51,11 @@ const App = () => {
             <MyRoutines username={username} setUsername={setUsername} />
           </Route>
           <Route path="/activities">
-            <Activities />
+            <Activities
+              username={username}
+              setUsername={setUsername}
+              authenticate={authenticate}
+            />
           </Route>
           <Route path="/login">
             <Login

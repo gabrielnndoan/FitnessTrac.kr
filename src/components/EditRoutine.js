@@ -1,28 +1,33 @@
 import { useState } from "react";
 import Modal from "react-modal";
-import { getToken, getUsername } from "../auth";
+import { getToken } from "../auth";
 Modal.setAppElement("#root");
 
-const MakeRoutine = ({ routines, setRoutines }) => {
+const EditRoutine = ({
+  routines,
+  setRoutines,
+  routineId,
+}) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [name, setName] = useState("");
-  const [goal, setGoal] = useState("");
-  const [isPublic, setIsPublic] = useState(false);
-  function makeNewRoutine(event) {
+    const [name, setName] = useState("");
+    const [goal, setGoal] = useState("");
+  function editNewRoutine(event) {
     event.preventDefault();
     if (getToken()) {
-      fetch("https://nameless-cove-00092.herokuapp.com/api/routines", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${getToken()}`,
-        },
-        body: JSON.stringify({
-          name: name,
-          goal: goal,
-          isPublic: isPublic,
-        }),
-      })
+      fetch(
+        `https://nameless-cove-00092.herokuapp.com/api/routines/${routineId}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getToken()}`,
+          },
+          body: JSON.stringify({
+            name: name,
+            goal: goal,
+          }),
+        }
+      )
         .then((response) => response.json())
         .then((result) => {
           if (result) {
@@ -46,7 +51,7 @@ const MakeRoutine = ({ routines, setRoutines }) => {
           setModalIsOpen(true);
         }}
       >
-        MAKE NEW ROUTINE
+        EDIT ROUTINE
       </button>
       <Modal
         style={{
@@ -76,8 +81,8 @@ const MakeRoutine = ({ routines, setRoutines }) => {
         }}
         isOpen={modalIsOpen}
       >
-        <form className="postForm" onSubmit={makeNewRoutine}>
-          <h3> Make a New Routine! </h3>
+        <form className="postForm" onSubmit={editNewRoutine}>
+          <h3> Edit Routine! </h3>
           <label className="titleLabel" id="wrapper">
             Name:
           </label>
@@ -94,16 +99,9 @@ const MakeRoutine = ({ routines, setRoutines }) => {
               setGoal(event.target.value);
             }}
           />
-          <label className="descriptionLabel">Is Public:</label>
-          <input
-            className="descriptionInput"
-            type="checkbox"
-            onClick={() => {
-              !isPublic ? setIsPublic(true) : setIsPublic(false);
-            }}
-          />
+
           <button className="makePostButton" type="submit">
-            Make a New Routine
+            Edit Routine
           </button>
           <button
             className="closeModalButton"
@@ -117,4 +115,4 @@ const MakeRoutine = ({ routines, setRoutines }) => {
   );
 };
 
-export default MakeRoutine;
+export default EditRoutine;

@@ -1,17 +1,11 @@
 import { useState, useEffect } from "react";
-import { getUsername } from "../auth";
+import { getToken } from "../auth";
+import MakeActivity from './MakeActivity'
 
-const Activities = ({ authenticate, username, setUsername }) => {
+const Activities = ({ authenticate }) => {
   const [activities, setActivities] = useState([]);
 
   useEffect(() => {
-    getUsername()
-      .then((response) => response.json())
-      .then((result) => {
-        // setUsername(result.username);
-        console.log(result)
-      })
-      .catch(console.error);
     fetch("https://nameless-cove-00092.herokuapp.com/api/activities", {
       headers: {
         "Content-Type": "application/json",
@@ -38,6 +32,7 @@ const Activities = ({ authenticate, username, setUsername }) => {
             </section>
           );
         })}
+        {authenticate && getToken() ? <MakeActivity activities={activities} setActivities={setActivities}/> : null}
       </section>
     </div>
   );
