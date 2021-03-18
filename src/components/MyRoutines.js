@@ -64,7 +64,7 @@ const MyRoutines = ({ username, setUsername }) => {
                   className="deletePostButton"
                   onClick={() => deletePost(routine.id)}
                 >
-                  Delete Post
+                  Delete Routine
                 </button>
               </section>
             );
