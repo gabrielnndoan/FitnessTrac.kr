@@ -1,4 +1,4 @@
-import {React, useState } from "react";
+import { React, useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { getToken, login } from "../auth";
 
@@ -7,60 +7,56 @@ const Login = ({
   setAuthentication,
   username,
   setUsername,
-  setToken
+  setToken,
 }) => {
-  const [ password, setPassword ] = useState();
-  const [ loginSuccessful, setLoginSuccessful ] = useState(false);
+  const [password, setPassword] = useState();
+  const [loginSuccessful, setLoginSuccessful] = useState(false);
   function authentication(event) {
     event.preventDefault();
-      fetch(
-        'http://fitnesstrac-kr.herokuapp.com/api/users/login',
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            // 'Authorization': 'Bearer TOKEN_STRING_HERE'
-          },
-          body: JSON.stringify({
-              username: username,
-              password: password,
-          }),
+    fetch("https://nameless-cove-00092.herokuapp.com/api/users/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: username,
+        password: password,
+      }),
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.error) {
+          alert("Username or Password does not match. Please try again.");
+        } else {
+          console.log(result);
+          login(result.token);
+          setToken(getToken());
+          isLoggedIn(result);
         }
-      )
-        .then((response) => response.json())
-        .then((result) => {
-          if(!result.success) {
-            alert(result.message)
-          }
-          console.log(result)
-          // login(result.token);
-          // setToken(getToken())
-          // isLoggedIn(result)
-        })
-        .catch(console.error);
-  
+      })
+      .catch(console.error);
   }
 
   const isLoggedIn = (result) => {
-    if (result) {
+    if (!result.error) {
       console.log("is logged in");
       setAuthentication(true);
       setLoginSuccessful(true);
-      alert(result.message)
+      alert(result.message);
     } else {
-      console.log("not logged in")
-      alert(result.message)
+      console.log("not logged in");
+      alert(result.message);
     }
-  }; 
+  };
 
   if (loginSuccessful && authenticate) {
     return <Redirect to="/myRoutines" />;
-  } 
+  }
 
   return (
     <div className="registerInput">
       <h1> Login Page </h1>
-      <form className="form" onSubmit={ authentication }>
+      <form className="form" onSubmit={authentication}>
         <label className="userLabel">Username:</label>
         <input
           className="userInput"
@@ -93,4 +89,3 @@ const Login = ({
 };
 
 export default Login;
-

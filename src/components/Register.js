@@ -9,7 +9,7 @@ const Register = ({ username, setUsername, token, setToken, authenticate, setAut
   function createUser(event) {
     event.preventDefault();
     if (username && password && password === passwordConfirmation) {
-      fetch("http://fitnesstrac-kr.herokuapp.com/api/users/register", {
+      fetch("https://nameless-cove-00092.herokuapp.com/api/users/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -22,12 +22,14 @@ const Register = ({ username, setUsername, token, setToken, authenticate, setAut
         .then((response) => response.json())
         .then((result) => {
           console.log(result);
-          if (!result.success) {
-            alert(result.message);
+          if (result.error) {
+            alert(result.error);
           }
-          login(result.token);
-          setToken(getToken());
-          isLoggedIn(result);
+          if(result.token !== undefined) {
+            login(result.token);
+            setToken(getToken());
+            isLoggedIn(result);
+          }
         })
         .catch(console.error);
     }
