@@ -33,7 +33,7 @@ const App = () => {
       
      
       <Navbar bg="dark" variant="dark">
-    <Navbar.Brand href="#home">Fitness Tracker</Navbar.Brand>
+    <Navbar.Brand href="#home">FitnessTrackr</Navbar.Brand>
     <Nav className="mr-auto">
       <Nav.Link href="/">Home</Nav.Link>
       <Nav.Link href="/routines">Routines</Nav.Link>

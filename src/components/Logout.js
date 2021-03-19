@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Redirect } from "react-router-dom";
+import { Redirect, Route } from "react-router-dom";
 import { getToken, logout } from "../auth";
 
 const Logout = ({ authenticate, setAuthentication }) => {
@@ -14,7 +14,9 @@ const Logout = ({ authenticate, setAuthentication }) => {
   }, []);
 
   if (logoutSuccessful && !authenticate) {
-    return <Redirect to="/" />;
+    return (<Route exact path="/logout">
+    <Redirect to="/" />
+  </Route>)
   }
   return null;
 };
