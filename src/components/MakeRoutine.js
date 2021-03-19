@@ -40,7 +40,6 @@ const MakeRoutine = ({ routines, setRoutines }) => {
   return (
     <div>
       <button
-        className="makePostButton"
         onClick={(event) => {
           event.preventDefault();
           setModalIsOpen(true);
@@ -53,8 +52,8 @@ const MakeRoutine = ({ routines, setRoutines }) => {
           overlay: {
             position: "fixed",
             top: 200,
-            left: 300,
-            right: 300,
+            left: 200,
+            right: 200,
             bottom: 200,
             backgroundColor: "white",
             border: "solid gold",
@@ -76,41 +75,29 @@ const MakeRoutine = ({ routines, setRoutines }) => {
         }}
         isOpen={modalIsOpen}
       >
-        <form className="postForm" onSubmit={makeNewRoutine}>
+        <form onSubmit={makeNewRoutine}>
           <h3> Make a New Routine! </h3>
-          <label className="titleLabel" id="wrapper">
-            Name:
-          </label>
+          <label id="wrapper">Name:</label>
           <input
-            className="titleInput"
             onChange={(event) => {
               setName(event.target.value);
             }}
           />
-          <label className="descriptionLabel">Goal:</label>
+          <label>Goal:</label>
           <input
-            className="descriptionInput"
             onChange={(event) => {
               setGoal(event.target.value);
             }}
           />
-          <label className="descriptionLabel">Is Public:</label>
+          <label>Is Public:</label>
           <input
-            className="descriptionInput"
             type="checkbox"
             onClick={() => {
               !isPublic ? setIsPublic(true) : setIsPublic(false);
             }}
           />
-          <button className="makePostButton" type="submit">
-            Make a New Routine
-          </button>
-          <button
-            className="closeModalButton"
-            onClick={() => setModalIsOpen(false)}
-          >
-            Close
-          </button>
+          <button type="submit">Make a New Routine</button>
+          <button onClick={() => setModalIsOpen(false)}>Close</button>
         </form>
       </Modal>
     </div>

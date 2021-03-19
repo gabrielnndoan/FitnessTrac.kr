@@ -54,32 +54,30 @@ const Login = ({
   }
 
   return (
-    <div className="registerInput">
+    <div >
       <h1> Login Page </h1>
-      <form className="form" onSubmit={authentication}>
-        <label className="userLabel">Username:</label>
+      <form  onSubmit={authentication}>
+        <label>Username:</label>
         <input
-          className="userInput"
-          minLength="8"
+          // minLength="8"
           onChange={(event) => {
             setUsername(event.target.value);
           }}
         ></input>
 
-        <label className="passwordLabel">Password:</label>
+        <label>Password:</label>
         <input
           type="password"
-          className="passwordInput"
           minLength="8"
           onChange={(event) => {
             setPassword(event.target.value);
           }}
         ></input>
-        <div className="organizeButtons">
-          <button className="loginButton" type="submit">
+        <div>
+          <button  type="submit">
             Login
           </button>
-          <Link className="registerButton" to="/register">
+          <Link  to="/register">
             Click to Register
           </Link>
         </div>

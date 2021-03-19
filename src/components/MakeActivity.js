@@ -3,11 +3,11 @@ import Modal from "react-modal";
 import { getToken } from "../auth";
 Modal.setAppElement("#root");
 
-const MakeActivity = ({ activities, setActivities}) => {
+const MakeActivity = ({ activities, setActivities }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  
+
   function makeNewActivity(event) {
     event.preventDefault();
     if (getToken()) {
@@ -29,8 +29,8 @@ const MakeActivity = ({ activities, setActivities}) => {
             console.log(result);
             newActivities.push(result);
             setActivities(newActivities);
-            if(result.error) {
-                alert("This activity already exists. Please create a new one.")
+            if (result.error) {
+              alert("This activity already exists. Please create a new one.");
             }
           }
         })
@@ -42,7 +42,6 @@ const MakeActivity = ({ activities, setActivities}) => {
   return (
     <div>
       <button
-        className="makePostButton"
         onClick={(event) => {
           event.preventDefault();
           setModalIsOpen(true);
@@ -78,33 +77,22 @@ const MakeActivity = ({ activities, setActivities}) => {
         }}
         isOpen={modalIsOpen}
       >
-        <form className="postForm" onSubmit={makeNewActivity}>
+        <form onSubmit={makeNewActivity}>
           <h3> Make a New Activity </h3>
-          <label className="titleLabel" id="wrapper">
-            Name:
-          </label>
+          <label id="wrapper">Name:</label>
           <input
-            className="titleInput"
             onChange={(event) => {
               setName(event.target.value);
             }}
           />
-          <label className="descriptionLabel">Description:</label>
+          <label>Description:</label>
           <input
-            className="descriptionInput"
             onChange={(event) => {
               setDescription(event.target.value);
             }}
           />
-          <button className="makePostButton" type="submit">
-            Make a New Activity
-          </button>
-          <button
-            className="closeModalButton"
-            onClick={() => setModalIsOpen(false)}
-          >
-            Close
-          </button>
+          <button type="submit">Make a New Activity</button>
+          <button onClick={() => setModalIsOpen(false)}>Close</button>
         </form>
       </Modal>
     </div>

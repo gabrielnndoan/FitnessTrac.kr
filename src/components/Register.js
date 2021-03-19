@@ -2,7 +2,14 @@ import { useState, React } from "react";
 import { Redirect } from "react-router-dom";
 import { login, getToken } from "../auth";
 
-const Register = ({ username, setUsername, token, setToken, authenticate, setAuthentication }) => {
+const Register = ({
+  username,
+  setUsername,
+  token,
+  setToken,
+  authenticate,
+  setAuthentication,
+}) => {
   const [password, setPassWord] = useState();
   const [passwordConfirmation, setPassWordConfirmation] = useState();
 
@@ -25,7 +32,7 @@ const Register = ({ username, setUsername, token, setToken, authenticate, setAut
           if (result.error) {
             alert(result.error);
           }
-          if(result.token !== undefined) {
+          if (result.token !== undefined) {
             login(result.token);
             setToken(getToken());
             isLoggedIn(result);
@@ -50,38 +57,33 @@ const Register = ({ username, setUsername, token, setToken, authenticate, setAut
   }
 
   return (
-    <div className="registerInput">
+    <div>
       <h1> Register Page </h1>
-      <p className="rules"> Username & Password must be 8 characters! </p>
-      <form className="form" onSubmit={createUser}>
-        <label className="userLabel">Username:</label>
+      <p> Username & Password must be 8 characters! </p>
+      <form onSubmit={createUser}>
+        <label>Username:</label>
         <input
-          className="userInput"
           minLength="8"
           onChange={(event) => {
             setUsername(event.target.value);
           }}
         ></input>
-        <label className="passwordLabel">Password:</label>
+        <label>Password:</label>
         <input
-          className="passwordInput"
           minLength="8"
           onChange={(event) => {
             setPassWord(event.target.value);
           }}
         ></input>
 
-        <label className="confirmLabel">Password Confirmation:</label>
+        <label>Password Confirmation:</label>
         <input
-          className="confirmInput"
           minLength="8"
           onChange={(event) => {
             setPassWordConfirmation(event.target.value);
           }}
         ></input>
-        <button className="submit" type="submit">
-          Submit
-        </button>
+        <button type="submit">Submit</button>
       </form>
     </div>
   );

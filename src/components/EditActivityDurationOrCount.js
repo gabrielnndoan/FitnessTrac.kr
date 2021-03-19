@@ -3,15 +3,19 @@ import Modal from "react-modal";
 import { getToken } from "../auth";
 Modal.setAppElement("#root");
 
-const EditRoutine = ({ routines, setRoutines, routineId }) => {
+const EditActivityDurationOrCount = ({
+  routines,
+  setRoutines,
+  routineActivityId,
+}) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [name, setName] = useState("");
-  const [goal, setGoal] = useState("");
-  function editNewRoutine(event) {
+  const [count, setCount] = useState("");
+  const [duration, setDuration] = useState("");
+  function editDurationOrCount(event) {
     event.preventDefault();
     if (getToken()) {
       fetch(
-        `https://nameless-cove-00092.herokuapp.com/api/routines/${routineId}`,
+        `https://nameless-cove-00092.herokuapp.com/api/routine_activities/${routineActivityId}`,
         {
           method: "PATCH",
           headers: {
@@ -19,23 +23,26 @@ const EditRoutine = ({ routines, setRoutines, routineId }) => {
             Authorization: `Bearer ${getToken()}`,
           },
           body: JSON.stringify({
-            name: name,
-            goal: goal,
+            count: count,
+            duration: duration,
           }),
         }
       )
         .then((response) => response.json())
         .then((result) => {
           if (result) {
-            const updatedRoutine = routines.map(routine => {
-              if(routine.id === routineId) {
-                return result;
-              } else {
-                return routine
-              }
-            })
-            setRoutines(updatedRoutine);
-  
+            console.log(result);
+            const updatedDurationOrCount = routines.map((routine) => {
+              routine.activities.map((activity) => {
+                if (activity.id === routineActivityId) {
+                  console.log(activity.id);
+                  console.log(routineActivityId);
+                  return result;
+                }
+              });
+              return routine;
+            });
+            setRoutines(updatedDurationOrCount);
           }
         })
         .catch(console.error);
@@ -46,12 +53,13 @@ const EditRoutine = ({ routines, setRoutines, routineId }) => {
   return (
     <div>
       <button
+        className="makePostButton"
         onClick={(event) => {
           event.preventDefault();
           setModalIsOpen(true);
         }}
       >
-        EDIT ROUTINE
+        EDIT ACTIVITY DURATION OR COUNT
       </button>
       <Modal
         style={{
@@ -81,28 +89,23 @@ const EditRoutine = ({ routines, setRoutines, routineId }) => {
         }}
         isOpen={modalIsOpen}
       >
-        <form onSubmit={editNewRoutine}>
-          <h3> Edit Routine! </h3>
-          <label id="wrapper">
-            Name:
-          </label>
+        <form onSubmit={editDurationOrCount}>
+          <h3> Edit Duration or Count of Activity! </h3>
+          <label id="wrapper">Count:</label>
           <input
             onChange={(event) => {
-              setName(event.target.value);
+              setCount(Number(event.target.value));
             }}
           />
-          <label >Goal:</label>
+          <label>Duration:</label>
           <input
             onChange={(event) => {
-              setGoal(event.target.value);
+              setDuration(Number(event.target.value));
             }}
           />
 
-          <button type="submit">
-            Edit Routine
-          </button>
+          <button type="submit">Edit Duration or Count of Activity!</button>
           <button
-           
             onClick={() => setModalIsOpen(false)}
           >
             Close
@@ -113,4 +116,4 @@ const EditRoutine = ({ routines, setRoutines, routineId }) => {
   );
 };
 
-export default EditRoutine;
+export default EditActivityDurationOrCount;
