@@ -37,6 +37,7 @@ const EditActivityDurationOrCount = ({
                 if (activity.id === routineActivityId) {
                   console.log(activity.id);
                   console.log(routineActivityId);
+                  console.log("new code")
                   return result;
                 }
               });
