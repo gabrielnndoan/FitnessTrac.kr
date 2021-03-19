@@ -12,6 +12,11 @@ import {
 } from "./components";
 import { getToken } from "./auth";
 import "./index.css";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Navbar from 'react-bootstrap/Navbar'
+import Nav from 'react-bootstrap/Nav'
+
+
 
 const App = () => {
   const [username, setUsername] = useState();
@@ -25,19 +30,30 @@ const App = () => {
   }, []);
   return (
     <Router>
-      <nav>
-        <Link to="/">HOME</Link>
-        <Link to="/routines">ROUTINES</Link>
-        {!authenticate && !getToken() ? null : (
-          <Link to="/myRoutines">MY ROUTINES</Link>
-        )}
-        <Link to="/activities">ACTIVITIES</Link>
-        {!authenticate && !getToken() ? (
-          <Link to="/login">LOGIN</Link>
-        ) : (
-          <Link to="/logout">LOGOUT</Link>
-        )}
-      </nav>
+      
+     
+      <Navbar bg="dark" variant="dark">
+    <Navbar.Brand href="#home">Fitness Tracker</Navbar.Brand>
+    <Nav className="mr-auto">
+      <Nav.Link href="/">Home</Nav.Link>
+      <Nav.Link href="/routines">Routines</Nav.Link>
+      {!authenticate && !getToken() ? null : (<Nav.Link href="/myRoutines">My Routines</Nav.Link>)}
+      <Nav.Link href="/activities">Activities</Nav.Link>
+      {!authenticate && !getToken() ? (<Nav.Link href="/login">Login</Nav.Link>) :
+      (<Nav.Link href="/logout">Logout</Nav.Link>)}
+    </Nav>
+   </Navbar>   
+    
+
+
+
+
+
+
+
+
+
+      
       <main>
         <Switch>
           <Route path="/routines">
