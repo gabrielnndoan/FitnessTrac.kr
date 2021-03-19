@@ -1,6 +1,10 @@
 import { React, useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { getToken, login } from "../auth";
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import Container from 'react-bootstrap/Container';
+
 
 const Login = ({
   authenticate,
@@ -54,35 +58,30 @@ const Login = ({
   }
 
   return (
-    <div >
-      <h1> Login Page </h1>
-      <form  onSubmit={authentication}>
-        <label>Username:</label>
-        <input
-          // minLength="8"
-          onChange={(event) => {
+    <Container>
+    <Form onSubmit={authentication}>
+  <Form.Group controlId="formBasicEmail">
+    <Form.Label>Username</Form.Label>
+    <Form.Control type="username" placeholder="Enter username" onChange={(event) => {
             setUsername(event.target.value);
-          }}
-        ></input>
+          }} />
+  </Form.Group>
 
-        <label>Password:</label>
-        <input
-          type="password"
-          minLength="8"
-          onChange={(event) => {
+  <Form.Group controlId="formBasicPassword">
+    <Form.Label>Password</Form.Label>
+    <Form.Control type="password" placeholder="Password" onChange={(event) => {
             setPassword(event.target.value);
-          }}
-        ></input>
-        <div>
-          <button  type="submit">
-            Login
-          </button>
-          <Link  to="/register">
+          }} />
+  </Form.Group>
+ 
+  <Button variant="primary" type="submit">
+    Submit
+  </Button>
+  <Link  to="/register">
             Click to Register
           </Link>
-        </div>
-      </form>
-    </div>
+</Form>
+</Container>
   );
 };
 
