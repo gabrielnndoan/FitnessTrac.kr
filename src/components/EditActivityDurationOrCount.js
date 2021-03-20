@@ -35,14 +35,25 @@ const EditActivityDurationOrCount = ({
       )
         .then((response) => response.json())
         .then((result) => {
-          routines.map((routine) => {
-            if (routine.creatorId === userId) {
-              console.log(routine.creatorId);
-              console.log(userId);
-              return result;
-            }
-          });
-          return result;
+          console.log(result);
+          if (result) {
+            const updatedDurationOrCount = routines.map((routine) => {
+              if (routine.creatorId === userId) {
+                console.log(routine.creatorId);
+                console.log(userId);
+                routine.activities.map((activity) => {
+                  if (routineActivityId === activity.id) {
+                    console.log(activity.id);
+                    console.log(routineActivityId);
+                    console.log(result);
+                    return result;
+                  }
+                });
+                return routine;
+              }
+            });
+            setRoutines(updatedDurationOrCount);
+          }
         })
         .catch(console.error);
     }
@@ -64,7 +75,7 @@ const EditActivityDurationOrCount = ({
             <Form.Group controlId="formBasicCount">
               <Form.Label>Count:</Form.Label>
               <Form.Control
-                placeholder="Update count"
+                placeholder="Update count (reps)"
                 onChange={(event) => {
                   setCount(Number(event.target.value));
                 }}
@@ -74,7 +85,7 @@ const EditActivityDurationOrCount = ({
             <Form.Group controlId="formBasicDuration">
               <Form.Label>Duration:</Form.Label>
               <Form.Control
-                placeholder="Update duration)"
+                placeholder="Update duration (mins)"
                 onChange={(event) => {
                   setDuration(Number(event.target.value));
                 }}

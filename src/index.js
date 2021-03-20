@@ -38,7 +38,7 @@ const App = () => {
           )}
           <Nav.Link href="/activities">Activities</Nav.Link>
           {!authenticate && !getToken() ? (
-            <Nav.Link href="/login">Login</Nav.Link>
+            <Nav.Link href="/login">Login/Register</Nav.Link>
           ) : (
             <Link
               style={{ color: "rgba(255,255,255,.5)", padding: "7.5px" }}
@@ -53,21 +53,13 @@ const App = () => {
       <main>
         <Switch>
           <Route path="/routines">
-            <Routines
-              username={username}
-              setUsername={setUsername}
-              authenticate={authenticate}
-            />
+            <Routines />
           </Route>
           <Route path="/myRoutines">
-            <MyRoutines username={username} setUsername={setUsername} />
+            <MyRoutines />
           </Route>
           <Route path="/activities">
-            <Activities
-              username={username}
-              setUsername={setUsername}
-              authenticate={authenticate}
-            />
+            <Activities authenticate={authenticate} />
           </Route>
           <Route path="/login">
             <Login
@@ -95,7 +87,7 @@ const App = () => {
             />
           </Route>
           <Route path="/">
-            <Home />
+            <Home authenticate={authenticate} />
           </Route>
         </Switch>
       </main>

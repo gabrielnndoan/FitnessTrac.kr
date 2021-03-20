@@ -2,7 +2,7 @@ import Jumbotron from "react-bootstrap/Jumbotron";
 import Container from "react-bootstrap/Container";
 import { Link } from "react-router-dom";
 
-const Home = () => {
+const Home = ({authenticate}) => {
   return (
     <Jumbotron style={{ height: "100vh" }}>
       <Container>
@@ -16,7 +16,7 @@ const Home = () => {
           </center>
         </p>
         <center>
-          <Link
+         { !authenticate ? <Link
             to="/register"
             style={{
               color: "#fff",
@@ -28,7 +28,7 @@ const Home = () => {
             }}
           >
             Register
-          </Link>
+          </Link> : null}
         </center>
       </Container>
     </Jumbotron>

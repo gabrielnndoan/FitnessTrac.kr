@@ -106,8 +106,8 @@ const MyRoutines = () => {
                             <h5 key={index}>
                               Activity: {activity.name.toUpperCase()}{" "}
                             </h5>
-                            <p>Count: {activity.count}</p>
-                            <p>Duration: {activity.duration}</p>
+                            <p>Count (reps): {activity.count}</p>
+                            <p>Duration (mins): {activity.duration}</p>
                             <EditActivityDurationOrCount
                               creatorId={routine.creatorId}
                               userId={userId}
