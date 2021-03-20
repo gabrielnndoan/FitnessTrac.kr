@@ -1,6 +1,9 @@
 import { useState, React } from "react";
 import { Redirect } from "react-router-dom";
 import { login, getToken } from "../auth";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import Container from "react-bootstrap/Container";
 
 const Register = ({
   username,
@@ -10,7 +13,7 @@ const Register = ({
   authenticate,
   setAuthentication,
 }) => {
-  const [password, setPassWord] = useState();
+  const [password, setPassword] = useState();
   const [passwordConfirmation, setPassWordConfirmation] = useState();
 
   function createUser(event) {
@@ -58,33 +61,55 @@ const Register = ({
 
   return (
     <div>
-      <h1> Register Page </h1>
-      <p> Username & Password must be 8 characters! </p>
-      <form onSubmit={createUser}>
-        <label>Username:</label>
-        <input
-          minLength="8"
-          onChange={(event) => {
-            setUsername(event.target.value);
-          }}
-        ></input>
-        <label>Password:</label>
-        <input
-          minLength="8"
-          onChange={(event) => {
-            setPassWord(event.target.value);
-          }}
-        ></input>
+      <Container>
+        <center>
+          <h1 style={{ padding: "35px" }}>REGISTER PAGE</h1>
+        </center>
+        <Form onSubmit={createUser}>
+          <Form.Group controlId="formBasicUsername">
+            <Form.Label>Username</Form.Label>
+            <Form.Control
+              type="username"
+              placeholder="Enter username"
+              onChange={(event) => {
+                setUsername(event.target.value);
+              }}
+            />
+          </Form.Group>
 
-        <label>Password Confirmation:</label>
-        <input
-          minLength="8"
-          onChange={(event) => {
-            setPassWordConfirmation(event.target.value);
-          }}
-        ></input>
-        <button type="submit">Submit</button>
-      </form>
+          <Form.Group controlId="formBasicPassword">
+            <Form.Label>Password</Form.Label>
+            <Form.Control
+              placeholder="Password"
+              minLength="8"
+              onChange={(event) => {
+                setPassword(event.target.value);
+              }}
+            />
+            <Form.Text id="passwordHelpInline" muted>
+              Must be greater than 7 characters.
+            </Form.Text>
+          </Form.Group>
+
+          <Form.Group controlId="formBasicPasswordConfirmation">
+            <Form.Label>Password Confirmation</Form.Label>
+            <Form.Control
+              placeholder="Password Confirmation"
+              minLength="8"
+              onChange={(event) => {
+                setPassWordConfirmation(event.target.value);
+              }}
+            />
+            <Form.Text id="passwordHelpInline" muted>
+              Must be greater than 7 characters.
+            </Form.Text>
+          </Form.Group>
+
+          <Button variant="primary" type="submit">
+            Submit
+          </Button>
+        </Form>
+      </Container>
     </div>
   );
 };

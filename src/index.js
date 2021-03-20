@@ -12,11 +12,9 @@ import {
 } from "./components";
 import { getToken } from "./auth";
 import "./index.css";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import Navbar from 'react-bootstrap/Navbar'
-import Nav from 'react-bootstrap/Nav'
-
-
+import "bootstrap/dist/css/bootstrap.min.css";
+import Navbar from "react-bootstrap/Navbar";
+import Nav from "react-bootstrap/Nav";
 
 const App = () => {
   const [username, setUsername] = useState();
@@ -30,30 +28,28 @@ const App = () => {
   }, []);
   return (
     <Router>
-      
-     
       <Navbar bg="dark" variant="dark">
-    <Navbar.Brand href="#home">FitnessTrackr</Navbar.Brand>
-    <Nav className="mr-auto">
-      <Nav.Link href="/">Home</Nav.Link>
-      <Nav.Link href="/routines">Routines</Nav.Link>
-      {!authenticate && !getToken() ? null : (<Nav.Link href="/myRoutines">My Routines</Nav.Link>)}
-      <Nav.Link href="/activities">Activities</Nav.Link>
-      {!authenticate && !getToken() ? (<Nav.Link href="/login">Login</Nav.Link>) :
-      (<Nav.Link href="/logout">Logout</Nav.Link>)}
-    </Nav>
-   </Navbar>   
-    
+        <Navbar.Brand href="/">FitnessTrackr</Navbar.Brand>
+        <Nav className="mr-auto">
+          <Nav.Link href="/">Home</Nav.Link>
+          <Nav.Link href="/routines">Routines</Nav.Link>
+          {!authenticate && !getToken() ? null : (
+            <Nav.Link href="/myRoutines">My Routines</Nav.Link>
+          )}
+          <Nav.Link href="/activities">Activities</Nav.Link>
+          {!authenticate && !getToken() ? (
+            <Nav.Link href="/login">Login</Nav.Link>
+          ) : (
+            <Link
+              style={{ color: "rgba(255,255,255,.5)", padding: "7.5px" }}
+              to="/logout"
+            >
+              Logout
+            </Link>
+          )}
+        </Nav>
+      </Navbar>
 
-
-
-
-
-
-
-
-
-      
       <main>
         <Switch>
           <Route path="/routines">

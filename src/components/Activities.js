@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { getToken } from "../auth";
-import MakeActivity from './MakeActivity'
+import MakeActivity from "./MakeActivity";
 
 const Activities = ({ authenticate }) => {
   const [activities, setActivities] = useState([]);
@@ -21,19 +21,25 @@ const Activities = ({ authenticate }) => {
 
   return (
     <div>
-      <h1>Activities</h1>
+      <center>
+        {" "}
+        <h1>Activities</h1>
+        {authenticate && getToken() ? (
+          <MakeActivity activities={activities} setActivities={setActivities} />
+        ) : null}
+      <hr></hr>
       <section>
         {activities.map((activity, index) => {
           return (
             <section key={index}>
               <h3>{activity.name}</h3>
               <p>{activity.description}</p>
-              <hr></hr> 
+              <hr></hr>
             </section>
           );
         })}
-        {authenticate && getToken() ? <MakeActivity activities={activities} setActivities={setActivities}/> : null}
       </section>
+      </center>
     </div>
   );
 };

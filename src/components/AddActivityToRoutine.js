@@ -1,13 +1,17 @@
 import { useState, useEffect } from "react";
-import Modal from "react-modal";
-Modal.setAppElement("#root");
+import { getToken } from "../auth";
+import Form from "react-bootstrap/Form";
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
 
-const AddActivityToRoutine = ({ routineId }) => {
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+const AddActivityToRoutine = ({ routines, setRoutines, routineId }) => {
   const [activityId, setActivityId] = useState("");
   const [count, setCount] = useState("");
   const [duration, setDuration] = useState("");
   const [activities, setActivities] = useState([]);
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   useEffect(() => {
     fetch("https://nameless-cove-00092.herokuapp.com/api/activities", {
@@ -30,16 +34,25 @@ const AddActivityToRoutine = ({ routineId }) => {
       `https://nameless-cove-00092.herokuapp.com/api/routines/${routineId}/activities`,
       {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getToken()}`,
+        },
         body: JSON.stringify({
-          activityId: 4,
-          count: 20,
-          duration: 20,
+          activityId: activityId,
+          count: count,
+          duration: duration,
         }),
       }
     )
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
+        if (result) {
+          const newRoutines = [...routines];
+          console.log(result);
+          newRoutines.push(result);
+          setRoutines(newRoutines);
+        }
       })
       .catch(console.error);
     event.target.reset();
@@ -47,84 +60,66 @@ const AddActivityToRoutine = ({ routineId }) => {
 
   return (
     <div>
-      <button
-        onClick={(event) => {
-          event.preventDefault();
-          setModalIsOpen(true);
-        }}
-      >
-        ADD ACTIVITY
-      </button>
-      <Modal
-        style={{
-          overlay: {
-            position: "fixed",
-            top: 200,
-            left: 200,
-            right: 200,
-            bottom: 200,
-            backgroundColor: "white",
-            border: "solid gold",
-          },
-          content: {
-            position: "absolute",
-            top: "40px",
-            left: "40px",
-            right: "40px",
-            bottom: "40px",
-            border: "5px solid gold",
-            background: "#fff",
-            overflow: "auto",
-            WebkitOverflowScrolling: "touch",
-            borderRadius: "4px",
-            outline: "none",
-            padding: "10px",
-          },
-        }}
-        isOpen={modalIsOpen}
-      >
-        <form onSubmit={addAct}>
-          <h3> Add Activity! </h3>
-          <label id="wrapper">Activity:</label>
+      <Button variant="info" onClick={handleShow}>
+        Add Activity to Routine.
+      </Button>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Add Activity to Routine.</Modal.Title>
+        </Modal.Header>
 
-          <select
-            name="activities"
-            // value={activityId}
-            id="add-activity"
-            onChange={(event) => {
-              setActivityId(event.target.value);
-              console.log(event.target.value);
-              console.log(activityId);
-            }}
-          >
-            <option value="activities">Choose Activity</option>
-            {activities.map((activity, index) => {
-              return (
-                <option key={index} value={activity.id}>
-                  {activity.name}
-                </option>
-              );
-            })}
-          </select>
+        <Form onSubmit={addAct}>
+          <Modal.Body>
+            <Form.Label>Activity: </Form.Label>
+            <select
+              name="activities"
+              value={activityId}
+              id="add-activity"
+              onChange={(event) => {
+                setActivityId(event.target.value);
+                console.log(event.target.value);
+                console.log(activityId);
+              }}
+            >
+              <option value="activities">Choose Activity</option>
+              {activities.map((activity, index) => {
+                return (
+                  <option key={index} value={activity.id}>
+                    {activity.name}
+                  </option>
+                );
+              })}
+            </select>
+            <Form.Group controlId="formBasicCount">
+              <Form.Label>Count:</Form.Label>
+              <Form.Control
+                placeholder="Enter count (reps)"
+                onChange={(event) => {
+                  setCount(Number(event.target.value));
+                }}
+              />
+            </Form.Group>
 
-          <label id="wrapper">Count:</label>
-          <input
-            onChange={(event) => {
-              console.log(event.target.value);
-              setCount(Number(event.target.value));
-            }}
-          />
+            <Form.Group controlId="formBasicDuration">
+              <Form.Label>Duration:</Form.Label>
+              <Form.Control
+                placeholder="Enter duration (mins)"
+                onChange={(event) => {
+                  setDuration(event.target.value);
+                }}
+              />
+            </Form.Group>
+          </Modal.Body>
 
-          <label>Duration:</label>
-          <input
-            onChange={(event) => {
-              setDuration(Number(event.target.value));
-            }}
-          />
-
-          <button type="submit">Add Activity</button>
-          <button onClick={() => setModalIsOpen(false)}>Close</button>
-        </form>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Close
+            </Button>
+            <Button variant="primary" type="submit">
+              Add Activity to Routine.
+            </Button>
+          </Modal.Footer>
+        </Form>
       </Modal>
     </div>
   );

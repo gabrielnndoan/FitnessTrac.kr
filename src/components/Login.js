@@ -1,10 +1,9 @@
 import { React, useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { getToken, login } from "../auth";
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import Container from 'react-bootstrap/Container';
-
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import Container from "react-bootstrap/Container";
 
 const Login = ({
   authenticate,
@@ -58,30 +57,51 @@ const Login = ({
   }
 
   return (
-    <Container>
-    <Form onSubmit={authentication}>
-  <Form.Group controlId="formBasicEmail">
-    <Form.Label>Username</Form.Label>
-    <Form.Control type="username" placeholder="Enter username" onChange={(event) => {
-            setUsername(event.target.value);
-          }} />
-  </Form.Group>
+    <div>
+      <Container>
+        <center><h1 style={{padding: "35px"}}>LOGIN PAGE</h1></center>
+        <Form onSubmit={authentication}>
+          <Form.Group controlId="formBasicUsername">
+            <Form.Label>Username</Form.Label>
+            <Form.Control
+              type="username"
+              placeholder="Enter username"
+              onChange={(event) => {
+                setUsername(event.target.value);
+              }}
+            />
+          </Form.Group>
 
-  <Form.Group controlId="formBasicPassword">
-    <Form.Label>Password</Form.Label>
-    <Form.Control type="password" placeholder="Password" onChange={(event) => {
-            setPassword(event.target.value);
-          }} />
-  </Form.Group>
- 
-  <Button variant="primary" type="submit">
-    Submit
-  </Button>
-  <Link  to="/register">
+          <Form.Group controlId="formBasicPassword">
+            <Form.Label>Password</Form.Label>
+            <Form.Control
+              type="password"
+              placeholder="Password"
+              onChange={(event) => {
+                setPassword(event.target.value);
+              }}
+            />
+          </Form.Group>
+
+          <Button variant="primary" type="submit">
+            Submit
+          </Button>
+          <Link
+            to="/register"
+            style={{
+              color: "#fff",
+              background: "#007bff",
+              padding: "10px",
+              margin: "10px 15px",
+              borderRadius: "7%",
+              fontSize: "14px",
+            }}
+          >
             Click to Register
           </Link>
-</Form>
-</Container>
+        </Form>
+      </Container>
+    </div>
   );
 };
 

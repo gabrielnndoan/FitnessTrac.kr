@@ -1,12 +1,16 @@
 import { useState } from "react";
-import Modal from "react-modal";
 import { getToken } from "../auth";
-Modal.setAppElement("#root");
+import Form from "react-bootstrap/Form";
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
 
 const MakeActivity = ({ activities, setActivities }) => {
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [show, setShow] = useState(false);
+  
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   function makeNewActivity(event) {
     event.preventDefault();
@@ -41,59 +45,46 @@ const MakeActivity = ({ activities, setActivities }) => {
 
   return (
     <div>
-      <button
-        onClick={(event) => {
-          event.preventDefault();
-          setModalIsOpen(true);
-        }}
-      >
-        MAKE NEW ACTIVITY
-      </button>
-      <Modal
-        style={{
-          overlay: {
-            position: "fixed",
-            top: 200,
-            left: 300,
-            right: 300,
-            bottom: 200,
-            backgroundColor: "white",
-            border: "solid gold",
-          },
-          content: {
-            position: "absolute",
-            top: "40px",
-            left: "40px",
-            right: "40px",
-            bottom: "40px",
-            border: "5px solid gold",
-            background: "#fff",
-            overflow: "auto",
-            WebkitOverflowScrolling: "touch",
-            borderRadius: "4px",
-            outline: "none",
-            padding: "10px",
-          },
-        }}
-        isOpen={modalIsOpen}
-      >
-        <form onSubmit={makeNewActivity}>
-          <h3> Make a New Activity </h3>
-          <label id="wrapper">Name:</label>
-          <input
-            onChange={(event) => {
-              setName(event.target.value);
-            }}
-          />
-          <label>Description:</label>
-          <input
-            onChange={(event) => {
-              setDescription(event.target.value);
-            }}
-          />
-          <button type="submit">Make a New Activity</button>
-          <button onClick={() => setModalIsOpen(false)}>Close</button>
-        </form>
+      <Button variant="primary" onClick={handleShow}>
+        Create Activity.
+      </Button>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Make New Activity.</Modal.Title>
+        </Modal.Header>
+
+        <Form onSubmit={makeNewActivity}>
+          <Modal.Body>
+            <Form.Group controlId="formBasicName">
+              <Form.Label>Name:</Form.Label>
+              <Form.Control
+                placeholder="Enter name"
+                onChange={(event) => {
+                  setName(event.target.value);
+                }}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="formBasicGoal">
+              <Form.Label>Description:</Form.Label>
+              <Form.Control
+                placeholder="Enter description"
+                onChange={(event) => {
+                  setDescription(event.target.value);
+                }}
+              />
+            </Form.Group>
+          </Modal.Body>
+
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Close
+            </Button>
+            <Button variant="primary" type="submit">
+              Make a New Activity
+            </Button>
+          </Modal.Footer>
+        </Form>
       </Modal>
     </div>
   );

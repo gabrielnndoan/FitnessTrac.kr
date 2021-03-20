@@ -1,12 +1,16 @@
 import { useState } from "react";
-import Modal from "react-modal";
 import { getToken } from "../auth";
-Modal.setAppElement("#root");
+import Form from "react-bootstrap/Form";
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
 
 const EditRoutine = ({ routines, setRoutines, routineId }) => {
-  const [modalIsOpen, setModalIsOpen] = useState(false);
   const [name, setName] = useState("");
   const [goal, setGoal] = useState("");
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
   function editNewRoutine(event) {
     event.preventDefault();
     if (getToken()) {
@@ -27,15 +31,14 @@ const EditRoutine = ({ routines, setRoutines, routineId }) => {
         .then((response) => response.json())
         .then((result) => {
           if (result) {
-            const updatedRoutine = routines.map(routine => {
-              if(routine.id === routineId) {
+            const updatedRoutine = routines.map((routine) => {
+              if (routine.id === routineId) {
                 return result;
               } else {
-                return routine
+                return routine;
               }
-            })
+            });
             setRoutines(updatedRoutine);
-  
           }
         })
         .catch(console.error);
@@ -45,69 +48,46 @@ const EditRoutine = ({ routines, setRoutines, routineId }) => {
 
   return (
     <div>
-      <button
-        onClick={(event) => {
-          event.preventDefault();
-          setModalIsOpen(true);
-        }}
-      >
-        EDIT ROUTINE
-      </button>
-      <Modal
-        style={{
-          overlay: {
-            position: "fixed",
-            top: 200,
-            left: 300,
-            right: 300,
-            bottom: 200,
-            backgroundColor: "white",
-            border: "solid gold",
-          },
-          content: {
-            position: "absolute",
-            top: "40px",
-            left: "40px",
-            right: "40px",
-            bottom: "40px",
-            border: "5px solid gold",
-            background: "#fff",
-            overflow: "auto",
-            WebkitOverflowScrolling: "touch",
-            borderRadius: "4px",
-            outline: "none",
-            padding: "10px",
-          },
-        }}
-        isOpen={modalIsOpen}
-      >
-        <form onSubmit={editNewRoutine}>
-          <h3> Edit Routine! </h3>
-          <label id="wrapper">
-            Name:
-          </label>
-          <input
-            onChange={(event) => {
-              setName(event.target.value);
-            }}
-          />
-          <label >Goal:</label>
-          <input
-            onChange={(event) => {
-              setGoal(event.target.value);
-            }}
-          />
+      <Button variant="warning" onClick={handleShow}>
+        Edit Routine
+      </Button>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit Routine.</Modal.Title>
+        </Modal.Header>
 
-          <button type="submit">
-            Edit Routine
-          </button>
-          <button
-           
-            onClick={() => setModalIsOpen(false)}
-          >
-            Close
-          </button>
-        </form>
+        <Form onSubmit={editNewRoutine}>
+          <Modal.Body>
+            <Form.Group controlId="formBasicName">
+              <Form.Label>Name:</Form.Label>
+              <Form.Control
+                placeholder="Update name"
+                onChange={(event) => {
+                  setName(event.target.value);
+                }}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="formBasicGoal">
+              <Form.Label>Goal:</Form.Label>
+              <Form.Control
+                placeholder="Update goal"
+                onChange={(event) => {
+                  setGoal(event.target.value);
+                }}
+              />
+            </Form.Group>
+          </Modal.Body>
+
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Close
+            </Button>
+            <Button variant="primary" type="submit">
+              Edit Routine.
+            </Button>
+          </Modal.Footer>
+        </Form>
       </Modal>
     </div>
   );

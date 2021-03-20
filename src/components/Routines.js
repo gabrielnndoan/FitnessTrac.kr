@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import Card from "react-bootstrap/Card";
+import CardGroup from "react-bootstrap/CardGroup";
 
 const Routines = () => {
   const [routines, setRoutines] = useState([]);
@@ -19,31 +21,40 @@ const Routines = () => {
 
   return (
     <div>
-      <h1>Routines</h1>
-      <section>
-        {routines.map((routine, index) => {
-          return (
-            <section key={index}>
-              <h3>{routine.name}</h3>
-              <p>{routine.goal}</p>
-              <p>{routine.creatorName}</p>
-              <div>
-                Activities
-                {routine.activities.map((activity, index) => {
-                  return (
-                    <>
-                      <h5 key={index}>{activity.name} </h5>
-                      <p>count: {activity.count}</p>
-                      <p>duration: {activity.duration}</p>
-                    </>
-                  );
-                })}
-              </div>
-              <hr></hr>
-            </section>
-          );
-        })}
-      </section>
+      <center>
+        <h1>Routines</h1>
+        <hr />
+        <section>
+          {routines.map((routine, index) => {
+            return (
+              <CardGroup>
+                <Card style={{ backgroundColor: "dark" }}>
+                  <Card.Body>
+                    <Card.Title>{routine.name.toUpperCase()}</Card.Title>
+                    <Card.Text key={index}>
+                      <p>{routine.goal}</p>
+                      <div>
+                        {routine.activities.map((activity, index) => {
+                          return (
+                            <>
+                              <p style={{ fontWeight: "bold" }} key={index}>
+                                Activity: {activity.name.toUpperCase()}
+                              </p>
+                              <p>Count (reps): {activity.count}</p>
+                              <p>Duration (mins): {activity.duration}</p>
+                            </>
+                          );
+                        })}
+                      </div>
+                      <p style={{ fontWeight: "bold" }}>Routine by: {routine.creatorName}</p>
+                    </Card.Text>
+                  </Card.Body>
+                </Card>
+              </CardGroup>
+            );
+          })}
+        </section>
+      </center>
     </div>
   );
 };

@@ -1,17 +1,22 @@
 import { useState } from "react";
-import Modal from "react-modal";
 import { getToken } from "../auth";
-Modal.setAppElement("#root");
+import Form from "react-bootstrap/Form";
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
 
 const EditActivityDurationOrCount = ({
   routines,
   setRoutines,
   routineActivityId,
+  userId,
 }) => {
-  const [modalIsOpen, setModalIsOpen] = useState(false);
   const [count, setCount] = useState("");
   const [duration, setDuration] = useState("");
-  function editDurationOrCount(event) {
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  function editCountAndDuration(event) {
     event.preventDefault();
     if (getToken()) {
       fetch(
@@ -30,21 +35,14 @@ const EditActivityDurationOrCount = ({
       )
         .then((response) => response.json())
         .then((result) => {
-          if (result) {
-            console.log(result);
-            const updatedDurationOrCount = routines.map((routine) => {
-              routine.activities.map((activity) => {
-                if (activity.id === routineActivityId) {
-                  console.log(activity.id);
-                  console.log(routineActivityId);
-                  console.log("new code")
-                  return result;
-                }
-              });
-              return routine;
-            });
-            setRoutines(updatedDurationOrCount);
-          }
+          routines.map((routine) => {
+            if (routine.creatorId === userId) {
+              console.log(routine.creatorId);
+              console.log(userId);
+              return result;
+            }
+          });
+          return result;
         })
         .catch(console.error);
     }
@@ -53,65 +51,46 @@ const EditActivityDurationOrCount = ({
 
   return (
     <div>
-      <button
-        className="makePostButton"
-        onClick={(event) => {
-          event.preventDefault();
-          setModalIsOpen(true);
-        }}
-      >
-        EDIT ACTIVITY DURATION OR COUNT
-      </button>
-      <Modal
-        style={{
-          overlay: {
-            position: "fixed",
-            top: 200,
-            left: 300,
-            right: 300,
-            bottom: 200,
-            backgroundColor: "white",
-            border: "solid gold",
-          },
-          content: {
-            position: "absolute",
-            top: "40px",
-            left: "40px",
-            right: "40px",
-            bottom: "40px",
-            border: "5px solid gold",
-            background: "#fff",
-            overflow: "auto",
-            WebkitOverflowScrolling: "touch",
-            borderRadius: "4px",
-            outline: "none",
-            padding: "10px",
-          },
-        }}
-        isOpen={modalIsOpen}
-      >
-        <form onSubmit={editDurationOrCount}>
-          <h3> Edit Duration or Count of Activity! </h3>
-          <label id="wrapper">Count:</label>
-          <input
-            onChange={(event) => {
-              setCount(Number(event.target.value));
-            }}
-          />
-          <label>Duration:</label>
-          <input
-            onChange={(event) => {
-              setDuration(Number(event.target.value));
-            }}
-          />
+      <Button variant="secondary" onClick={handleShow}>
+        Edit Activity's Count and Duration
+      </Button>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit Activity's Count and Duration</Modal.Title>
+        </Modal.Header>
 
-          <button type="submit">Edit Duration or Count of Activity!</button>
-          <button
-            onClick={() => setModalIsOpen(false)}
-          >
-            Close
-          </button>
-        </form>
+        <Form onSubmit={editCountAndDuration}>
+          <Modal.Body>
+            <Form.Group controlId="formBasicCount">
+              <Form.Label>Count:</Form.Label>
+              <Form.Control
+                placeholder="Update count"
+                onChange={(event) => {
+                  setCount(Number(event.target.value));
+                }}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="formBasicDuration">
+              <Form.Label>Duration:</Form.Label>
+              <Form.Control
+                placeholder="Update duration)"
+                onChange={(event) => {
+                  setDuration(Number(event.target.value));
+                }}
+              />
+            </Form.Group>
+          </Modal.Body>
+
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Close
+            </Button>
+            <Button variant="primary" type="submit">
+              Edit Activity's Count and Duration
+            </Button>
+          </Modal.Footer>
+        </Form>
       </Modal>
     </div>
   );

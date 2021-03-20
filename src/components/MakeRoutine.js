@@ -1,13 +1,17 @@
 import { useState } from "react";
-import Modal from "react-modal";
-import { getToken, getUsername } from "../auth";
-Modal.setAppElement("#root");
+import { getToken } from "../auth";
+import Form from "react-bootstrap/Form";
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
 
 const MakeRoutine = ({ routines, setRoutines }) => {
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [show, setShow] = useState(false);
+
   const [name, setName] = useState("");
   const [goal, setGoal] = useState("");
   const [isPublic, setIsPublic] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
   function makeNewRoutine(event) {
     event.preventDefault();
     if (getToken()) {
@@ -39,66 +43,55 @@ const MakeRoutine = ({ routines, setRoutines }) => {
 
   return (
     <div>
-      <button
-        onClick={(event) => {
-          event.preventDefault();
-          setModalIsOpen(true);
-        }}
-      >
-        MAKE NEW ROUTINE
-      </button>
-      <Modal
-        style={{
-          overlay: {
-            position: "fixed",
-            top: 200,
-            left: 200,
-            right: 200,
-            bottom: 200,
-            backgroundColor: "white",
-            border: "solid gold",
-          },
-          content: {
-            position: "absolute",
-            top: "40px",
-            left: "40px",
-            right: "40px",
-            bottom: "40px",
-            border: "5px solid gold",
-            background: "#fff",
-            overflow: "auto",
-            WebkitOverflowScrolling: "touch",
-            borderRadius: "4px",
-            outline: "none",
-            padding: "10px",
-          },
-        }}
-        isOpen={modalIsOpen}
-      >
-        <form onSubmit={makeNewRoutine}>
-          <h3> Make a New Routine! </h3>
-          <label id="wrapper">Name:</label>
-          <input
-            onChange={(event) => {
-              setName(event.target.value);
-            }}
-          />
-          <label>Goal:</label>
-          <input
-            onChange={(event) => {
-              setGoal(event.target.value);
-            }}
-          />
-          <label>Is Public:</label>
-          <input
-            type="checkbox"
-            onClick={() => {
-              !isPublic ? setIsPublic(true) : setIsPublic(false);
-            }}
-          />
-          <button type="submit">Make a New Routine</button>
-          <button onClick={() => setModalIsOpen(false)}>Close</button>
-        </form>
+      <Button variant="primary" onClick={handleShow}>
+        Create Routine.
+      </Button>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Make New Routine</Modal.Title>
+        </Modal.Header>
+
+        <Form onSubmit={makeNewRoutine}>
+          <Modal.Body>
+            <Form.Group controlId="formBasicName">
+              <Form.Label>Name:</Form.Label>
+              <Form.Control
+                placeholder="Enter name"
+                onChange={(event) => {
+                  setName(event.target.value);
+                }}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="formBasicGoal">
+              <Form.Label>Goal:</Form.Label>
+              <Form.Control
+                placeholder="Enter goal"
+                onChange={(event) => {
+                  setGoal(event.target.value);
+                }}
+              />
+            </Form.Group>
+            <Form.Group controlId="formBasicGoal">
+              <Form.Label>IsPublic:</Form.Label>
+              <Form.Control
+                type="checkbox"
+                onClick={() => {
+                  !isPublic ? setIsPublic(true) : setIsPublic(false);
+                }}
+              />
+            </Form.Group>
+          </Modal.Body>
+
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Close
+            </Button>
+            <Button variant="primary" type="submit">
+              Make a New Routine
+            </Button>
+          </Modal.Footer>
+        </Form>
       </Modal>
     </div>
   );
